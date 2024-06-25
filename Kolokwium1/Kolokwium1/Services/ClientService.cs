@@ -16,7 +16,7 @@ public class ClientService : IClientService
 
     public async Task<Client> GetClientWithRentalsAsync(int clientId)
     {
-        return await _context.Clients
+        return await _context.Client
             .Include(c => c.CarRentals)
             .ThenInclude(cr => cr.Car)
             .ThenInclude(car => car.Model)
@@ -38,8 +38,8 @@ public class ClientService : IClientService
             TotalPrice = totalPrice
         };
 
-        _context.Clients.Add(client);
-        _context.CarRentals.Add(carRental);
+        _context.Client.Add(client);
+        _context.CarRental.Add(carRental);
 
         await _context.SaveChangesAsync();
     }

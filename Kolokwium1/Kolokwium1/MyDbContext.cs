@@ -4,9 +4,9 @@ public class MyDbContext : DbContext
 {
     public MyDbContext(DbContextOptions<MyDbContext> options) : base(options) { }
 
-    public DbSet<Car> Cars { get; set; }
-    public DbSet<Client> Clients { get; set; }
-    public DbSet<CarRental> CarRentals { get; set; }
-    public DbSet<Model> Models { get; set; }
-    public DbSet<Color> Colors { get; set; }
+    public DbSet<Car> Car { get; set; }
+    public DbSet<Client> Client { get; set; }
+    public DbSet<CarRental> CarRental { get; set; }
+    public DbSet<Model> Model { get; set; }
+    public DbSet<Color> Color { get; set; }
 }
