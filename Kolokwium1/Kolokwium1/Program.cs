@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Kolokwium1.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,7 +10,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<MyDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
-builder.Services.AddControllers();
+
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    // Handle circular references in JSON serialization
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+});
+
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<ICarRentalService, CarRentalService>();
 var app = builder.Build();

@@ -1,4 +1,5 @@
 ﻿namespace Kolokwium1.Controllers;
+using Kolokwium1.DTO;
 using Kolokwium1.Services;
 using Kolokwium1.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -46,9 +47,3 @@ public class AddClientRequest
     public DateTime DateTo { get; set; }
 }
 
-public class ClientDto
-{
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public string Address { get; set; }
-}

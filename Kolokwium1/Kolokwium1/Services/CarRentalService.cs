@@ -11,7 +11,7 @@ public class CarRentalService : ICarRentalService
 
     public async Task<int> CalculateTotalPriceAsync(int carId, DateTime dateFrom, DateTime dateTo)
     {
-        var car = await _context.Car.FindAsync(carId);
+        var car = await _context.Cars.FindAsync(carId);
         var days = (dateTo - dateFrom).Days;
         return car.PricePerDay * days;
     }
