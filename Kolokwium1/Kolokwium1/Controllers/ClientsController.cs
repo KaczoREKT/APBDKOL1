@@ -1,49 +1,48 @@
-﻿namespace Kolokwium1.Controllers;
-using Kolokwium1.DTO;
+﻿using Kolokwium1.Models;
 using Kolokwium1.Services;
-using Kolokwium1.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
-[ApiController]
-[Route("api/[controller]")]
-public class ClientsController : ControllerBase
+namespace Kolokwium1.Controllers
 {
-    private readonly IClientService _clientService;
-
-    public ClientsController(IClientService clientService)
+    [ApiController]
+    [Route("api/[controller]")]
+    public class ClientsController : ControllerBase
     {
-        _clientService = clientService;
-    }
+        private readonly IClientService _clientService;
 
-    [HttpGet("{clientId}")]
-    public async Task<IActionResult> GetClient(int clientId)
-    {
-        var client = await _clientService.GetClientWithRentalsAsync(clientId);
-        if (client == null) return NotFound();
-        return Ok(client);
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> AddClient([FromBody] AddClientRequest request)
-    {
-        var client = new Client
+        public ClientsController(IClientService clientService)
         {
-            FirstName = request.Client.FirstName,
-            LastName = request.Client.LastName,
-            Address = request.Client.Address
-        };
+            _clientService = clientService;
+        }
 
-        await _clientService.AddClientWithRentalAsync(client, request.CarId, request.DateFrom, request.DateTo);
-        return CreatedAtAction(nameof(GetClient), new { clientId = client.ID }, client);
+        [HttpGet("{clientId}")]
+        public async Task<IActionResult> GetClient(int clientId)
+        {
+            var client = await _clientService.GetClientWithRentalsAsync(clientId);
+            if (client == null) return NotFound();
+            return Ok(client);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddClient([FromBody] AddClientRequest request)
+        {
+            var client = new Client
+            {
+                FirstName = request.Client.FirstName,
+                LastName = request.Client.LastName,
+                Address = request.Client.Address
+            };
+
+            try
+            {
+                await _clientService.AddClientWithRentalAsync(client, request.CarId, request.DateFrom, request.DateTo);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
+            return CreatedAtAction(nameof(GetClient), new { clientId = client.ID }, client);
+        }
     }
 }
-
-public class AddClientRequest
-{
-    public ClientDto Client { get; set; }
-    public int CarId { get; set; }
-    public DateTime DateFrom { get; set; }
-    public DateTime DateTo { get; set; }
-}
-
